@@ -1,5 +1,5 @@
 <?
-	$steam_key = "EB47486975BD8BF884E376969C0BD2D8"; // YOU NEED THIS
+	$steam_key = "Get this from http://steamcommunity.com/dev/apikey"; // YOU NEED THIS
 	
 	$banner_top = "Welcome to YouTube Load"; // What it will say on the top
 	
