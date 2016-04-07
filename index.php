@@ -81,8 +81,8 @@
 		</div>
 	</body>
 	<?
-		if( static_list( $id ) != false ){
-			print("<script>document.getElementById(\"video\").innerHTML = \"<iframe width='100%' height='100%' src='//www.youtube.com/embed/" . static_list( $id ) . "?iv_load_policy=3&rel=0&autoplay=1&showinfo=0&controls=0' frameborder='0' allowfullscreen></iframe>\"</script>\"");
+		if( static_list( $id, $playerVideos ) != false ){
+			print("<script>document.getElementById(\"video\").innerHTML = \"<iframe width='100%' height='100%' src='//www.youtube.com/embed/" . static_list( $id, $playerVideos ) . "?iv_load_policy=3&rel=0&autoplay=1&showinfo=0&controls=0' frameborder='0' allowfullscreen></iframe>\"</script>\"");
 		}
 	?>
 	<script>
