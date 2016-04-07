@@ -1,10 +1,11 @@
 <?
-	$steam_key = "EB47486975BD8BF884E376969C0BD2D8"; // YOU NEED THIS
+	error_reporting(0);
+
+	$steam_key = "Get this from http://steamcommunity.com/dev/apikey"; // YOU NEED THIS
 	
-	$banner_top = "Welcome to YouTube Load"; // What it will say on the top
+	$banner_top = "Welcome to Pococraft"; // What it will say on the top
 	
-	$PlaylistGenerationSize = 10; // How many videos we should generate and queue
-	
+	$PlaylistGenerationSize = 20; // How many videos we should generate and queue
 	//////////////////////////////////////////////////////
 	// Name: Static List		                        //
 	// Desc: Ignores randomizer and plays only 1 video  //
@@ -13,12 +14,10 @@
 		$list = array(
 		
 		//	ID 					|  VideoID
-			"76561197972597160" => "i3uVX-RUFVw",
-			"76561198060486309" => "_s8OlKt_dRY",
 			
 		);
 		
-		if ( in_array( $id, $list ) ) { return false; }
+		if ( !in_array( $id, $list ) ) { return false; }
 		return $list[$id];
 	}
 	
@@ -29,72 +28,63 @@
 	
 	function GetRandomVideo() {
 		$videolist = array(
-			"mN6O62qwyGY",
-			"PDu_T54K-VI",
-			"OFzXaFbxDcM",
-			"hgKDu5pp_fU",
-			"D1sZ_vwqwcE",
-			"48jt_lWA7W0",
-			"b6vSf0cA9qY",
-			"e-fA-gBCkj0",
-			"vKYAbhIEZug",
-			"KD5fLb-WgBU",
-			"IgGjUjQRAxw",
-			"5-6fEj17MK4",
-			"E7fzUGR8ZH4",
-			"scmQ6iN8hKM",
-			"6fdr-Fiv92c",
-			"vc3JWo2iiGc",
-			"l18A5BOTlzE",
-			"gk-aCL6eyGc",
-			"n4tK7LYFxI0",
-			"oABEGc8Dus0",
-			"dGghkjpNCQ8",
-			"ojofvfeA3Fg",
-			"WomOv0gB7O8",
-			"kn6-c223DUU",
-			"8PTDv_szmL0",
-			"aTBSQKh8teE",
-			"_ovdm2yX4MA",
-			"Sv6dMFF_yts",
-			"ghb6eDopW8I",
-			"sf6LD2B_kDQ",
-			"dVVZaZ8yO6o",
-			"36reZ9-3VK0",
-			"IJNR2EpS0jw",
-			"PWofgnLXTtk",
-			"RlD-Sufzrh4",
-			"4u-6B_iF5s0",
-			"8rnr2wuAhYc",
-			"y6Sxv-sUYtM",
-			"Jj-pSzqb-Xk",
-			"c71RCAyLS1M",
-			"6qwkVGDKVvE",
-			"WZJKIFWFSU0",
-			"gTLWb9BJbiI",
-			"ytc0U2WAz4s",
+			"0O2aH4XLbto",
+			"BfSX7EN0yXs",
+			"L7fQoXzIgeg",
+			"17svtURunUk",
+			"hyj4JFSErrw",
+			"YlEb3L1PIco",
+			"lhjk5x54bsE",
+			"IU5vKbyc3c8",
+			"XYmLhn3qJ6Y",
+			"2vjPBrBU-TM",
+			"VtQxK5TQ22g",
+			"_04s7ONnJRs",
+			"9UpunuBr4QI",
+			"C2cr7SBBT6A",
+			"_4kuQ_T95VY",
+			"IcrbM1l_BoI",
+			"-fm8VahT1hs",
+			"qYodWEKCuGg",
+			"QYVwqJCIdR0",
 			"GNpNfhpqDk4",
-			"HAIDqt2aUek",
-			"qUsm3PCoGIE",
-			"5NV6Rdv1a3I",
-			"hT_nvWreIhg",
-			"qrOeGCJdZe4",
-			"ktvTqknDobU",
-			"dvgZkm1xWPE",
-			"YgFyi74DVjc",
-			"jlAgHt92lqE",
-			"-RYlAPjyNm8",
+			"y6oXW_YiV6g",
+			"y6oXW_YiV6g",
+			"2Z4m4lnjxkY",
+			"ZZ5LpwO-An4",
+			"gy1B3agGNxw",
+			"6md5RSnVUuo",
+			"elsh3J5lJ6g",
+			"eE9tV1WGTgE",
+			"LWGJA9i18Co",
+			"UJKythlXAIY",
+			"3xUfCUFPL-8",
+			"c-5nR_xMpj4",
+			"TAK5uw7x-Aw",
+			"AI_RDJ7ifZQ",
+			"Kybyy1EkoOE",
+			"vmOArLdg9d4",
+			"CNlFkP6nvLE",
+			"GnrwM7vFn_U",
+			"IvUU8joBb1Q",
+			"gHCDN7Gr3KU",
+			"Vn1pf0Xi3nU",
+			"r_oaVD4NzYo",
+			"JvQY6tLMdL0",
+			"11t75Vsgjc0",
+			"bwsrbC51jxc",
+			"QbZfY28ptv4",
+			"7PdV2UtsNes",
+			"ZGpXlL5Ltdc",
+			"RX6YeYT3ed8",
 		);
 		
-		return $videolist[rand( 0, count( $videolist ) - 1 )]; // Don't touch this!!
+		return $videolist[mt_rand( 0, count( $videolist ) )]; // Don't touch this!!
 	}
-	
-	//////////////////////////////////////////////////////
-	// Name: Automatic Playlist Generator               //
-	// Desc: I recommend not touching this.             //
-	//////////////////////////////////////////////////////
-	
 	function GeneratePlaylist() {
+		
+		$x = $PlaylistQueue = null; // Otherwise undefined
+		
 		while ($x <= $GLOBALS['PlaylistGenerationSize']) {
 			$VideoID = GetRandomVideo();
 			if( strpos($PlaylistQueue , $VideoID) != false) {  // If we get a duplicate in the playlist
