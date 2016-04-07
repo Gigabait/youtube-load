@@ -4,31 +4,9 @@
 	$banner_top = "Welcome to YouTube Load"; // What it will say on the top
 	
 	$PlaylistGenerationSize = 10; // How many videos we should generate and queue
-	
-	//////////////////////////////////////////////////////
-	// Name: Static List		                        //
-	// Desc: Ignores randomizer and plays only 1 video  //
-	//////////////////////////////////////////////////////
-	function static_list( $id ) {
-		$list = array(
-		
-		//	ID 					|  VideoID
-			"76561197972597160" => "i3uVX-RUFVw",
-			"76561198060486309" => "_s8OlKt_dRY",
-			
-		);
-		
-		if ( in_array( $id, $list ) ) { return false; }
-		return $list[$id];
-	}
-	
-	//////////////////////////////////////////////////////
-	// Name: YouTube Playlist                           //
-	// Desc: Randomizes videos based on embedded ID     //
-	//////////////////////////////////////////////////////
-	
-	function GetRandomVideo() {
-		$videolist = array(
+    
+    //Lists
+    $videolist = array(
 			"mN6O62qwyGY",
 			"PDu_T54K-VI",
 			"OFzXaFbxDcM",
@@ -85,8 +63,28 @@
 			"jlAgHt92lqE",
 			"-RYlAPjyNm8",
 		);
-		
-		return $videolist[rand( 0, count( $videolist ) - 1 )]; // Don't touch this!!
+        $playerVideos = array(
+            //"SteamID64" => "VideoID",
+            "76561197972597160" => "i3uVX-RUFVw",
+			"76561198060486309" => "_s8OlKt_dRY",
+        );
+	
+	//////////////////////////////////////////////////////
+	// Name: Static List		                        //
+	// Desc: Ignores randomizer and plays only 1 video  //
+	//////////////////////////////////////////////////////
+	function static_list( $id, $list ) {
+		if ( in_array( $id, $list ) ) { return false; }
+		return $list[$id];
+	}
+	
+	//////////////////////////////////////////////////////
+	// Name: YouTube Playlist                           //
+	// Desc: Randomizes videos based on embedded ID     //
+	//////////////////////////////////////////////////////
+	
+	function GetRandomVideo($videos) {
+		return $videolist[rand( 0, count( $videos ) - 1 )]; // Don't touch this!!
 	}
 	
 	//////////////////////////////////////////////////////
@@ -96,7 +94,7 @@
 	
 	function GeneratePlaylist() {
 		while ($x <= $GLOBALS['PlaylistGenerationSize']) {
-			$VideoID = GetRandomVideo();
+			$VideoID = GetRandomVideo($videolist);
 			if( strpos($PlaylistQueue , $VideoID) != false) {  // If we get a duplicate in the playlist
 				// print("<script>console.warn(\"Duplicate found: " . $VideoID . ". REQUESTED RETRY!!\");</script>");
 			} else {
