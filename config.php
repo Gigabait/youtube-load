@@ -1,4 +1,4 @@
-<?
+<?php
 	$steam_key = "Get this from http://steamcommunity.com/dev/apikey"; // YOU NEED THIS
 	
 	$banner_top = "Welcome to YouTube Load"; // What it will say on the top
@@ -83,18 +83,21 @@
 	// Desc: Randomizes videos based on embedded ID     //
 	//////////////////////////////////////////////////////
 	
-	function GetRandomVideo($videos) {
-		return $videolist[rand( 0, count( $videos ) - 1 )]; // Don't touch this!!
+	function GetRandomVideo() {		
+		return $GLOBALS['videolist'][mt_rand( 0, sizeof( $GLOBALS['videolist'] ) - 1 )]; // Don't touch this!!
 	}
-	
+
 	//////////////////////////////////////////////////////
 	// Name: Automatic Playlist Generator               //
 	// Desc: I recommend not touching this.             //
 	//////////////////////////////////////////////////////
-	
+
 	function GeneratePlaylist() {
+		
+		$x = $PlaylistQueue = null; // Otherwise undefined
+		
 		while ($x <= $GLOBALS['PlaylistGenerationSize']) {
-			$VideoID = GetRandomVideo($videolist);
+			$VideoID = GetRandomVideo();
 			if( strpos($PlaylistQueue , $VideoID) != false) {  // If we get a duplicate in the playlist
 				// print("<script>console.warn(\"Duplicate found: " . $VideoID . ". REQUESTED RETRY!!\");</script>");
 			} else {

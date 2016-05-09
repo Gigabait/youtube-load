@@ -1,4 +1,4 @@
-<?
+<?php
 	include "config.php";
 	$id = $_GET["id"];
 	if( $steam_key != "Get this from http://steamcommunity.com/dev/apikey") {
@@ -73,11 +73,11 @@
 	
 	<body>
 		<div class="overlay"></div>
-		<h1 id="title" class="title"><? echo($banner_top); ?></h1>
+		<h1 id="title" class="title"><?php echo($banner_top); ?></h1>
 		<h1 id="footer" class="footer">Howdy, <?php echo($username); ?></h1>
 		
 		<div id="video">
-			<iframe id="player" width="100%" height="100%" src="//www.youtube.com/embed/<? print( GetRandomVideo() ); ?>?iv_load_policy=3&rel=0&autoplay=1&loop=1&showinfo=0&controls=0&playlist=<? print( GeneratePlaylist() ); ?>" frameborder="0" allowfullscreen></iframe>
+			<iframe id="player" width="100%" height="100%" src="//www.youtube.com/embed/<?php print( GetRandomVideo() ); ?>?iv_load_policy=3&rel=0&autoplay=1&loop=1&showinfo=0&controls=0&playlist=<?php print( GeneratePlaylist() ); ?>" frameborder="0" allowfullscreen></iframe>
 		</div>
 	</body>
 	<?
