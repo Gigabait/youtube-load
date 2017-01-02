@@ -1,91 +1,307 @@
 <?php
 	include "config.php";
-	$id = $_GET["id"];
-	if( $steam_key != "Get this from http://steamcommunity.com/dev/apikey") {
-		$playerarray = json_decode(file_get_contents('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' . $steam_key . '&steamids=' . $id . '&format=json'), true);
-		$username = htmlspecialchars($playerarray['response']['players'][0]['personaname']); // Username
+	include "lib/steamuser.class.php";
+	if( isset($_GET["id"]) ) {
+		$id = $_GET["id"];
 	} else {
-		Header( "Location: http://steamcommunity.com/dev/apikey" );
+		die( "#ERROR: Missing 'id' argument" );
 	}
+
+	$username = "Player";
+	$avatar   = "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/7c/7cfdd5970fa46b9784f16369a9464b3b0d409008_full.jpg";
+
+	if ($steam_key != "Get this from http://steamcommunity.com/dev/apikey") {
+		$playerarray = json_decode(file_get_contents('http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' . $steam_key . '&steamids=' . $id . '&format=json'), true);
+		if (isset ($playerarray)) {
+			if (is_null ($playerarray['response']['players'][0]['personaname'])) {
+				$username = "Pirate";
+				$avatar = "http://roundtherocktx.com/wp-content/uploads/2015/06/pirate.png";
+			} else {
+				$username = htmlspecialchars ($playerarray['response']['players'][0]['personaname']);
+				$avatar = $playerarray['response']['players'][0]['avatarfull'];			
+			}           
+		}
+	}
+
+	function createVideo(){
+		print("<script>
+		  function onYouTubeIframeAPIReady() {
+			var player;
+			player = new YT.Player('video', {
+			  videoId: '" . GetRandomVideo () ."',
+			  width: 0, // these shits don't matter
+			  height: 0, // fuck you
+			  playerVars: {
+				autoplay: 1, // Auto-play the video on load
+				iv_load_policy: 3,
+				rel: 0,
+				controls: 0,
+				playlist: '" . GeneratePlaylist (). "',		
+			  },
+			  events: {
+				onReady: function(e) {
+				  e.target.setVolume(1);
+				}
+			  }
+			});
+		  }
+		</script>");
+	}
+
 ?>
+<!DOCTYPE html>
 <html>
 	<head>
+		<title>YouTube Load (Potato Version)</title>
 		<meta charset="UTF-8" />
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,600,400&subset=cyrillic,cyrillic-ext,latin,greek-ext,greek,latin-ext,vietnamese' rel='stylesheet' type='text/css'>
 		<style>
+			@font-face {
+				font-family: VCR;
+				src: url(fonts/vcr.woff);
+			}
+			@font-face {
+				font-family: coolvetica;
+				src: url(fonts/coolvetica.ttf);
+			}
 			* {
 				pointer-events: none;
 				width: 100%;
 				height: 100%;
 				margin: 0px;
 				padding: 0px;
-				overflow: hidden;
+				/* overflow: hidden;*/
 				background-color: black;
+				font-family: VCR;
 			}
 			
+			body {
+				overflow: hidden;
+			}
+
 			h1 {
 				width: 100%;
 				font-size: 36pt;
 				height: 7%;
-				font-weight: 100;		
-				padding: 12px 0px;
+				font-weight: 100;
 				color: white;
-				font-family: 'Open Sans', sans-serif;
-				text-align: center;
+			}
+
+			.avatartext {
+				background: none;
+				color: white;
+				font-family: 'coolvetica', arial;
+				height: auto;
+				font-size: 18pt;
+			}
+
+			#avatarcontainer {
+				background: none;
+			}
+			#video {
+				background: none;
+			}
+
+			#avatar {
+				width: 128px;
+				height: 128px;
+				border-radius: 100%;
+				background: none;
 			}
 			.footer {
+				height: auto;
+				left: 2%;
 				position: fixed;
-				bottom: 7px;
+				bottom: 2%;
 				width: 100%;
-				z-index: 2;		
+				z-index: 2;     
 				padding-top: 20px;
-				background-color: brown;
-			}
-			
-			.title {
-				background: url(img/background.png) repeat;
 				padding-bottom: 20px;
-				z-index: 2;	
+				background: none;
 			}
-			.overlay {
+			.post_footer { /* $(this).toggleClass('post_footer'); */
+				background-color: green;
+			}
+			.title {
+				text-align: center;
+				display: none;
+				background: url(img/header_holiday.png);
+				padding-bottom: 5px;
+				padding-top: 20px;
+				z-index: 3; 
+			}
+			#container2 {
 				position: fixed;
-				background: url(img/overlays/1.png);
 				left: 0px;
 				top: 0px;
 				width: 100%;
 				height: 100%;
-				z-index: 1;
-				background-repeat: repeat;
+				z-index: 3;
+				background: none;
+			}
+
+			#static {
+				display: none;
+				opacity: .6;
+				position: fixed;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				height: 100%;
+				z-index: 2;
+				background-image: url(img/overlays/static.gif);
+			}
+			
+			.overlay {
+				position: fixed;
+				background: url(img/overlays/2.png) repeat;
+				left: 0px;
+				top: 0px;
+				width: 100%;
+				height: 100%;
+				z-index: 2;
+				opacity: 0.5;
+			}
+			
+			#footer_snow {
+				background: url(img/snow_footer.png) repeat-x;
+				position: fixed;
+				bottom: -80%;
+			}
+
+			#ring {
+			    background: none;
+			    width: 250px;
+			    height: 250px;
+			    position: absolute;
+			    overflow: visible;
+			    top: -39px;
+			    left: -62px;
+			}
+
+			#container2 {
+				background: none;
+				background-image: url('http://www.wearewebstars.dk/codepen/img/s1.png'), url('http://www.wearewebstars.dk/codepen/img//s2.png'), url('http://www.wearewebstars.dk/codepen/img//s3.png');
+				height: 100%;
+				left: 0;
+				position: absolute;
+				top: 0;
+				width: 100%;
+				z-index:1;
+				-webkit-animation: snow 10s linear infinite;
+				-moz-animation: snow 10s linear infinite;
+				-ms-animation: snow 10s linear infinite;
+				animation: snow 10s linear infinite;
+			}
+			@keyframes snow {
+			  0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+			  50% {background-position: 500px 500px, 100px 200px, -100px 150px;}
+			  100% {background-position: 500px 1000px, 200px 400px, -100px 300px;}
+			}
+			@-moz-keyframes snow {
+			  0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+			  50% {background-position: 500px 500px, 100px 200px, -100px 150px;}
+			  100% {background-position: 400px 1000px, 200px 400px, 100px 300px;}
+			}
+			@-webkit-keyframes snow {
+			  0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+			  50% {background-position: 500px 500px, 100px 200px, -100px 150px;}
+			  100% {background-position: 500px 1000px, 200px 400px, -100px 300px;}
+			}
+			@-ms-keyframes snow {
+			  0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+			  50% {background-position: 500px 500px, 100px 200px, -100px 150px;}
+			  100% {background-position: 500px 1000px, 200px 400px, -100px 300px;}
 			}
 		</style>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script>
-			$(document).ready(function() {
-				$("#footer").slideDown(0, function() {
-					$(this).delay(5000).slideUp('slow').delay(10000).animate({ height: 'toggle', opacity: 'toggle' }, 'slow');
-				});
-				$("#title").slideUp(0, function() {
-					$(this).delay(5000).slideDown('slow').delay(10000).animate({ height: 'toggle', opacity: 'toggle' }, 'slow');
-				});  
+			function SetStatusChanged( status ) {
+				if ( status == "Workshop Complete" ) {
+					// um
+				} else if ( status == "Sending client info..." ) {
+					$(".static").fadeIn( 7000 ) // Fade to static
+				}
+			}
+			$( document ).ready(function() {
+				function rainbowLoop( element ) {
+					element.animate({hueRadius: 360}, {
+						duration: 1000,
+						easing: 'linear',
+
+						step: function() {
+							$(this).css({
+								"-webkit-filter": "hue-rotate("+this.hueRadius+"deg)",
+							});
+						},
+
+						complete: rainbowLoop(this)
+					});
+				}
+
+				setTimeout(function() {
+
+					$("#footer").animate({ left: '5%', opacity: 'toggle', }, 500).delay(10000).animate({ left: '2%', opacity: 'toggle', }, 1000);
+					$("#video").animate({blurRadius: 10}, {
+						duration: 1000,
+						easing: 'linear',
+
+						step: function() {
+							$(this).css({
+								"-webkit-filter": "blur("+this.blurRadius+"px)",
+								"filter": "blur("+this.blurRadius+"px)"
+							});
+						}
+					}).delay(10000).animate({blurRadius: 0}, {
+						duration: 1000,
+						easing: 'linear',
+
+						step: function() {
+							$(this).css({
+								"-webkit-filter": "blur("+this.blurRadius+"px)",
+								"filter": "blur("+this.blurRadius+"px)"
+							});
+						},
+
+						//complete: rainbowLoop(this)
+					});
+					$("#title").slideDown('slow').delay(10000).animate({ height: 'toggle', opacity: 'toggle' }, 'slow');
+				}, 5000);
 			});
 		</script>
 	</head>
 	
 	<body>
-		<div class="overlay"></div>
-		<h1 id="title" class="title"><?php echo($banner_top); ?></h1>
-		<h1 id="footer" class="footer">Howdy, <?php echo($username); ?></h1>
-		
-		<div id="video">
-			<iframe id="player" width="100%" height="100%" src="//www.youtube.com/embed/<?php print( GetRandomVideo() ); ?>?iv_load_policy=3&rel=0&autoplay=1&loop=1&showinfo=0&controls=0&playlist=<?php print( GeneratePlaylist() ); ?>" frameborder="0" allowfullscreen></iframe>
+		<!--<audio hidden autoplay name="media">
+			<source src="welcome.mp3" type="audio/mpeg">
+		</audio>-->
+		<!--<div class="overlay"></div>-->
+		<div id="container2">
+			<h1 id="title" class="title"><?php echo($banner_top); ?></h1>
+			<h1 id="footer" class="footer">
+				<div id="avatarcontainer">
+					<img id="avatar" src="<?php echo($avatar); ?>"/>
+					<img id="ring" src="img/ring_holiday.png"/>
+					<span class="avatartext" style="position: absolute;padding-left: 70px;font-size: 36pt;"><?php echo($username); ?>
+						<!--<span class="avatartext" style="position: absolute; margin-left: 12px; width: auto; background: green; border: 2px solid green; border-left: 6px solid green; border-right: 6px solid green;">[insert rank here]</span>-->
+					</span>
+					<span class="avatartext" style="position: absolute;padding: 60px 70px;"><?php echo(isset ($bottom_text) ? $bottom_text : "It's gonna take a while if you're joining for the first time!"); ?></span>
+				</div>
+			</h1>
 		</div>
+
+		<div id="static" class="static"></div>
+		<div id="video"></div>
+		<div id="footer_snow"></div>
 	</body>
-	<?
-		if( static_list( $id, $playerVideos ) != false ){
-			print("<script>document.getElementById(\"video\").innerHTML = \"<iframe width='100%' height='100%' src='//www.youtube.com/embed/" . static_list( $id, $playerVideos ) . "?iv_load_policy=3&rel=0&autoplay=1&showinfo=0&controls=0' frameborder='0' allowfullscreen></iframe>\"</script>\"");
+
+	<script async src="https://www.youtube.com/iframe_api"></script>
+	<?php createVideo(); ?>
+
+	<?php
+		if( static_list( $id ) != false ){
+			print("<script>document.getElementById(\"video\").innerHTML = \"<iframe width='100%' height='100%' src='//www.youtube.com/embed/" . static_list( $id ) . "?iv_load_policy=3&rel=0&autoplay=1&showinfo=0&controls=0' frameborder='0' allowfullscreen></iframe>\"</script>\"");
 		}
 	?>
-	<script>
-		document.getElementById("player").volume=0.2; // Controls volume
-	</script>
+	<!-- test 060416 -->
 </html>

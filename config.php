@@ -3,6 +3,8 @@
 	
 	$banner_top = "Welcome to YouTube Load"; // What it will say on the top
 	
+	$bottom_text = "If you're joining for the first time, this might take a while!"; // What it will say on the top
+	
 	$PlaylistGenerationSize = 10; // How many videos we should generate and queue
     
     //Lists
